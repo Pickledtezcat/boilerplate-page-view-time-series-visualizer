@@ -5,13 +5,15 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 
-print("testing")
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-df = None
+df = pd.read_csv("fcc-forum-pageviews.csv", index_col="date")
 
 # Clean data
-df = None
 
+clean_filter = (df["value"] <= df["value"].quantile(0.975)) & (df["value"] >= df["value"].quantile(0.025))
+
+df = df.loc[clean_filter]
+print (df.head())
 
 def draw_line_plot():
     # Draw line plot
