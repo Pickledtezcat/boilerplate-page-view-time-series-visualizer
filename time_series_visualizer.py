@@ -4,27 +4,30 @@ import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
-
-# Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-df = pd.read_csv("fcc-forum-pageviews.csv", index_col="date")
-
-# Clean data
-
-clean_filter = (df["value"] <= df["value"].quantile(0.975)) & (df["value"] >= df["value"].quantile(0.025))
-
-df = df.loc[clean_filter]
-print (df.head())
+def get_data():
+  # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
+  df = pd.read_csv("fcc-forum-pageviews.csv", index_col="date")
+  
+  # Clean data
+  
+  clean_filter = (df["value"] <= df["value"].quantile(0.975)) & (df["value"] >= df["value"].quantile(0.025))
+  
+  df = df.loc[clean_filter]
+  return df
 
 def draw_line_plot():
-    # Draw line plot
+  df = get_data()
+  #print (df.head())
+  # Draw line plot
+  fig = plt.figure(figsize=(12, 8)) 
+  plt.plot(df.index, df["value"], color='red')
 
+  # Save image and return fig (don't change this part)
+   
+  fig.savefig('line_plot.png')
 
-
-
-
-    # Save image and return fig (don't change this part)
-    fig.savefig('line_plot.png')
-    return fig
+  print("finished")
+  return fig
 
 def draw_bar_plot():
 
