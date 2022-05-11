@@ -4,43 +4,44 @@ import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
-def get_data():
-  # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-  df = pd.read_csv("fcc-forum-pageviews.csv", index_col="date")
-  
-  # Clean data
-  
-  clean_filter = (df["value"] <= df["value"].quantile(0.975)) & (df["value"] >= df["value"].quantile(0.025))
-  
-  df = df.loc[clean_filter]
-  return df
+# Import data (Make sure to parse dates. Consider setting index column to 'date'.)
+df = pd.read_csv("fcc-forum-pageviews.csv", index_col="date")
+
+# Clean data
+
+clean_filter = (df["value"] <= df["value"].quantile(0.975)) & (df["value"] >= df["value"].quantile(0.025))
+
+df = df.loc[clean_filter]
+
 
 def draw_line_plot():
-  df = get_data()
+  #df = get_data()
   #print (df.head())
   # Draw line plot
-  fig = plt.figure(figsize=(12, 8)) 
+  fig = plt.figure(figsize=(24, 12)) 
   plt.plot(df.index, df["value"], color='red')
+  plt.title("Daily freeCodeCamp Forum Page Views 5/2016-12/2019")
+  plt.xlabel('Date')
+  plt.ylabel('Page Views')
 
   # Save image and return fig (don't change this part)
    
   fig.savefig('line_plot.png')
 
-  print("finished")
   return fig
 
 def draw_bar_plot():
 
-  return None
     # Copy and modify data for monthly bar plot
-  df_bar = None
+  df_bar = df.copy().groupby(pd.Grouper(freq='M'))
+  plt.bar(df_bar["values"])
 
   # Draw bar plot
+  #plt.title("Daily freeCodeCamp Forum Page Views 5/2016-12/2019")
+  plt.xlabel('Years')
+  plt.ylabel('Average Page Views')
 
-
-
-
-
+  fig = plt.figure(figsize=(24, 12)) 
   # Save image and return fig (don't change this part)
   fig.savefig('bar_plot.png')
   return fig
@@ -63,3 +64,4 @@ def draw_box_plot():
   # Save image and return fig (don't change this part)
   fig.savefig('box_plot.png')
   return fig
+
